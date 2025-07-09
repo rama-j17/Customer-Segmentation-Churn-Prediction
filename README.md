@@ -30,3 +30,5 @@ Reducing customer attrition is key to growing portfolio value. This project supp
 
 ## ✅ Business Impact
 Would Help retention team proactively engage top 15% at-risk users, preventing projected loss. Tableau dashboard enabled self-serve churn analysis across product teams.
+
+![image](https://github.com/user-attachments/assets/184a8f6b-ac49-457e-ba81-1b1ce4ddb6c6)
