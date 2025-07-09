@@ -5,6 +5,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import (classification_report, confusion_matrix,
                              roc_curve, roc_auc_score)
 from data_prep import load, make_pipeline
+import numpy as np
 
 X_train, X_test, y_train, y_test = load()
 pipe = Pipeline([
@@ -14,6 +15,24 @@ pipe = Pipeline([
 
 model = pipe.fit(X_train, y_train)
 joblib.dump(model, 'models/churn_logreg.joblib')
+
+# Get feature names after transformation
+feature_names = (
+    model.named_steps['prep']
+    .transformers_[0][1]  # OneHotEncoder
+    .get_feature_names_out(['country', 'gender'])
+    .tolist()
+    + ['credit_score', 'age', 'tenure', 'balance',
+       'products_number', 'credit_card', 'active_member', 'estimated_salary']
+)
+
+coefs = model.named_steps['clf'].coef_[0]
+imp = pd.Series(coefs, index=feature_names).sort_values()
+
+plt.figure(figsize=(8,6))
+imp.plot(kind='barh', title='Feature Importance (Logistic Coefficients)')
+plt.tight_layout()
+plt.savefig('reports/visuals/feature_importance.png', dpi=120)
 
 # Evaluation
 y_pred = model.predict(X_test)
